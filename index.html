@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQLL</title>
+
+    <style>
+        :root {
+  --background:#ffffff;
+  --foreground:#000000; 
+
+  --header:#415364;
+  --boarder: #C1CD23;
+  --nav: #7C6A55;
+
+  --background3: #262626;
+
+  --textMian: #415364;
+  --textSecondary: ;
+
+  --gray: #bfbfbf;
+  --gray2: #fafafa;
+
+  --red: #E62521;
+
+  --activeLink:#378eff;
+  --link:#f77062;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Kumbh Sans', Arial, sans-serif;
+    color:#ff00dc;
+    transition: all 0.3s ease-in-out;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+#searchResults{
+  display: none;
+}
+
+main{
+  display: block;
+  /* padding: 0px 20px; */
+  min-height: 75vh;
+  position: relative;
+  overflow:auto;
+  padding-top: 100px;
+}
+
+
+body{
+  background-color: var(--background);
+}
+
+nav{
+  background-color:var(--header);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 99; /* Ensures it stays above other content */
+}
+
+.header{
+  background-color: var(--header);
+  margin-top: 20px; 
+}
+
+.dropdown {
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  width: 100%;
+  max-width: 400px;
+  z-index: 1000;
+}
+
+.dropdown-item {
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background-color: #f0f0f0;
+}
+
+/* Modal styling */
+.modal {
+display: none;
+position: fixed;
+z-index: 1000;
+left: 0;
+top: 0;
+width: 100%;
+height: 100%;
+overflow: auto;
+background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+background-color: #fff;
+margin: 15% auto;
+padding: 20px;
+border: 1px solid #888;
+width: 80%;
+max-width: 400px;
+}
+
+.close {
+color: #aaa;
+float: right;
+font-size: 28px;
+font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+color: black;
+text-decoration: none;
+cursor: pointer;
+}
+
+/* Dropdown and highlight from previous code */
+.dropdown {
+position: absolute;
+background-color: white;
+border: 1px solid #ccc;
+width: 100%;
+max-width: 400px;
+z-index: 1000;
+top: 74px;
+padding: 8px;
+}
+
+.dropdown-item {
+cursor: pointer;
+}
+
+.dropdown-item:hover {
+background-color: #f0f0f0;
+}
+
+.highlight {
+  background-color:
+  color-mix(in srgb, var(--boarder) 80%, white 20%);
+  border-color: var(--nav) ;
+}
+
+#AdminDashboard{
+  display: none;
+}
+
+#AllCatagory{
+  display: grid; 
+  grid-template-columns: repeat(6, 1fr); 
+  gap: 10px 10px; 
+  place-items: center;
+}
+
+a, .ControlBtn{
+  font-size: 1.33rem;
+  font-weight: bold;
+  text-decoration: none;
+  color: var(--textMian);
+  padding: 20px;
+  border: solid var(--boarder) 3px;
+  border-radius: 1rem;
+  min-width: 300px;
+  max-width: 300px;
+  text-align: center;
+  margin: 10px;
+}
+
+a:hover, .ControlBtn:hover{
+  background-color: var(--boarder);
+  border-color: var(--nav) ;
+}
+
+a:active, .ControlBtn:active{
+  background-color: 
+  color-mix(in srgb, var(--boarder) 80%, white 20%);
+}
+.dropdown a{
+  border: none;
+  padding: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  margin: 4px 0 0 0;
+  padding: 8px;
+  border-radius: 0;
+}
+
+#searchBar{
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 25px;
+  height: 25px;
+  width: 500px;
+  border-radius: 1rem;
+  /* margin-bottom: 15px; */
+  color: var(--textMian);
+  
+}
+
+.menu {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  padding: 10px;
+  
+}
+
+.menu-title {
+  grid-column: 1;
+}
+
+.search-bar {
+  grid-column: 2;
+  display: flex;
+  justify-content: center;
+}
+
+h2{
+  padding: 5px 15px;
+}
+
+h1, h2 {
+  color: var(--background);
+}
+
+.modal-content h2, input, label, button{
+  color: var(--textMian);
+}
+
+input{
+  width: 300px;
+  height: 30px;
+  font-size: 1.1rem;
+  margin: 3px;
+  font-weight: 700;
+}
+
+.inputCheckbox{
+  width: 20px;
+  height: 20px;
+}
+
+.checkboxLabel{
+  font-size: 1.1rem;
+}
+
+.flex-container {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+}
+
+
+/* need to do media screen size stuff next */
+
+@media (max-width: 1980px) {
+  #AllCatagory{
+    grid-template-columns: repeat(5, 1fr); 
+  }
+}
+
+@media (max-width: 1630px) {
+  #AllCatagory{
+    grid-template-columns: repeat(4, 1fr); 
+  }
+}
+
+@media (max-width: 1300px) {
+  #AllCatagory{
+    grid-template-columns: repeat(3, 1fr); 
+  }
+}
+
+@media (max-width: 975px) {
+  #AllCatagory{
+    grid-template-columns: repeat(2, 1fr); 
+  }
+}
+
+@media (max-width: 645px) {
+  #AllCatagory{
+    grid-template-columns: repeat(1, 1fr); 
+  }
+  .menu{
+    display: block;
+  }
+  #searchBar{
+    font-size: 0.8rem;
+  }
+}
+    </style>
+</head>
+<body>
+    <!-- I aren't thy code poet  -->
+
+    <!-- Nav section -->
+<nav>
+    <!-- search bar menu-->
+    <div class="menu">
+        <div class="menu-title"><h1>Site-Quick-Link-List</h1></div>
+        <div class="search-bar">
+            <input type="text" id="searchBar" placeholder="Search by Site Number or Location Name" autocomplete="off">
+            <div id="searchResults" class="dropdown"></div>
+        </div>
+      </div>
+</nav>
+    <!--  -->
+
+    
+   <!-- main section -->
+   <main>
+
+    <!-- admin dashboard -->
+    <div id="AdminDashboard">
+        
+        
+        <button class="ControlBtn" id="enableEditMode">Enable Edit Mode</button>
+        <button class="ControlBtn" id="openAddModal">Add Link</button>
+        <button class="ControlBtn" id="toggleIPModeBtn">Show IP </button>
+        <button class="ControlBtn" id="toggleHTTPSModeBtn">Show HTTPS</button>
+        <button class="ControlBtn" id="SavePageBtn">Download File</button>
+        <!-- <button class="ControlBtn" id="OverwritePageBtn">Overwrite File</button> -->
+        <p>I am pink testing text</p>
+        <div class="header">
+            <h2>Admin Dashboard</h2>
+        </div>
+    </div>
+
+<!-- favorites
+    <div>
+        <div class="header">
+            <h2>Favorites</h2>
+        </div>
+        
+    </div>
+ Recently visted
+    <div>
+        <div class="header">
+            <h2>Recently Visted</h2>
+        </div>
+        
+    </div> -->
+<!-- All -->
+    <div>
+        <div id="AllCatagory">
+            <!-- site number - site name (site IP) [Has HTTPS] -->
+             <!-- 
+            <a class="location-link"
+            href="" link
+            data-site="" site number 
+            data-location="" site name
+            data-ip="" ip address
+            data-https="" does have https? (true or false)>
+            </a>
+
+            <a class="location-link"
+    href="" 
+    data-site="" 
+    data-location="" 
+    data-ip="" 
+    data-https=""></a>
+             -->
+
+             <!-- I couldn't be bothered to enter each one by hand for how little time it would save-->
+              <!-- Also http secure might have been a waste of resources it does nothing useful right now and if set to true does break things -->
+    <!-- example <a class="location-link" href="URL" data-site="siteNumber" data-location="siteName" data-ip="siteIP" data-https="false"></a> -->
+    
+    <a class="location-link" href="1.1.1.1" data-site="1111" data-location="ClouldFlare DNS" data-ip="1.1.1.1" data-https="true"></a>
+    <a class="location-link" href="google.com" data-site="8888" data-location="Google DNS" data-ip="8.8.8.8" data-https="true"></a>
+    <a class="location-link" href="10.0.0.1" data-site="0000" data-location="Your Router" data-ip="10.0.0.1" data-https="false"></a>
+    <a class="location-link" href="https://lookup.icann.org/en" data-site="3170" data-location="ICANN" data-ip="lookup.icann.org/en" data-https="true"></a>
+    <a class="location-link" href="https://example.net/" data-site="0138" data-location="example" data-ip="https://example.net/" data-https="true"></a>
+    <!-- Sites added after this have been added using the web'like'page -->
+
+    <!-- Edit/Remove Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Edit Link</h2>
+            <form id="editForm">
+                <input type="text" id="editSiteNumber" placeholder="Site Number" required>
+                <input type="text" id="editSiteName" placeholder="Site Name" required>
+                <input type="text" id="editSiteIP" placeholder="Site IP" required>
+                <br>
+                <label class="checkboxLabel" for="editHasHTTPS">Has HTTPS</label>
+                <input class="inputCheckbox" type="checkbox" id="editHasHTTPS">
+                <div class="flex-container"></div>
+                <br>
+                <button  class="ControlBtn" type="submit">Save Changes</button>
+                <br>
+                <button  class="ControlBtn" type="button" id="removeLink">Remove Link</button>
+            </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Add New Link Modal -->
+    <div id="addModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Add New Link</h2>
+            <form id="addForm">
+                <input type="text" id="addSiteNumber" placeholder="Site Number" required>
+                <input type="text" id="addSiteName" placeholder="Site Name" required>
+                <input type="text" id="addSiteIP" placeholder="Site IP" required>
+                <br>
+                <label class="checkboxLabel" for="addHasHTTPS">Has HTTPS</label>
+                <input class="inputCheckbox" type="checkbox" id="addHasHTTPS">
+                <br>
+                <div class="flex-container">
+                    <button class="ControlBtn" type="submit">Add Link</button>
+                </div>
+            </form>
+        </div>
+
+        </div>
+    </div>
+</main>
+
+<!-- footer -->
+<footer>
+
+</footer>
+
+<script>
+    // DOM Elements
+const allCatagoryDiv = document.getElementById('AllCatagory');
+const anchorElements = Array.from(allCatagoryDiv.getElementsByClassName('location-link'));
+const searchBar = document.getElementById('searchBar');
+const searchResultsDiv = document.getElementById('searchResults');
+const enableEditModeBtn = document.getElementById('enableEditMode');
+const editModal = document.getElementById('editModal');
+const addModal = document.getElementById('addModal');
+const editForm = document.getElementById('editForm');
+const addForm = document.getElementById('addForm');
+const toggleIPModeBtn = document.getElementById('toggleIPModeBtn');
+const toggleHTTPSModeBtn = document.getElementById('toggleHTTPSModeBtn');
+const SavePageBtn = document.getElementById('SavePageBtn');
+
+//The finest security in thy program 
+//DO NOT PUT ANY PASSWORD HERE this is not secure.
+const AdminDashboardKeyword = 'Admin';
+
+// Variables
+let editMode = false;
+let currentEditElement = null;
+let showIP = false;
+let showHTTPS = false;
+
+let firstSeachResult = null;
+
+// Convert anchor elements to site objects
+const sites = anchorElements.map(anchor => ({
+    siteNumber: anchor.dataset.site || null,
+    siteName: anchor.dataset.location || null,
+    siteIP: anchor.dataset.ip || null,
+    hasHTTPS: anchor.dataset.https === 'true',
+}));
+
+// Sort sites
+sites.sort((a, b) => {
+    const siteNumberComparison = parseInt(a.siteNumber) - parseInt(b.siteNumber);
+    if (siteNumberComparison !== 0) return siteNumberComparison;
+    return a.siteName?.localeCompare(b.siteName) || 0;
+});
+
+// Update links based on sorted sites and display options
+function updateLinks(sites, showIP, showHTTPS) {
+    sites.forEach((site, index) => {
+        if (index >= anchorElements.length) return;
+        const anchor = anchorElements[index];
+        const protocol = site.hasHTTPS ? 'https://' : 'http://';
+        anchor.href = `${protocol}${site.siteIP}`;
+        anchor.textContent = `${site.siteNumber} - ${site.siteName}${showIP ? ` (${site.siteIP})` : ''}${showHTTPS ? ` [${site.hasHTTPS ? 'True' : 'False'}]` : ''}`;
+    });
+}
+
+// Initial call to update links
+updateLinks(sites, showIP, showHTTPS);
+
+
+//buttons 
+
+//toggle if ip is shown and also searchable
+toggleIPModeBtn.addEventListener('click', () => {
+    showIP = !showIP;
+    toggleIPModeBtn.textContent = showIP ? "Hide IP" : "Show IP";
+    updateLinks(sites, showIP, showHTTPS);
+});
+
+//toggle http is shown
+toggleHTTPSModeBtn.addEventListener('click', () => {
+    showHTTPS = !showHTTPS;
+    toggleHTTPSModeBtn.textContent = showHTTPS ? "Hide HTTPS" : "Show HTTPS";
+    updateLinks(sites, showIP, showHTTPS);
+});
+
+//save changes to new file
+SavePageBtn.addEventListener('click', () => {
+    searchBar.value = "";
+    document.getElementById("AdminDashboard").style.display = "none";
+    const pageContent = document.documentElement.outerHTML;
+    
+    // Create a Blob from the HTML string
+    const blob = new Blob([pageContent], { type: 'text/html' });
+    
+    // Create a link element
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'Site-Quick-Link-List.html';
+    
+    // Append the link to the body
+    document.body.appendChild(a);
+    
+    // Trigger the download
+    a.click();
+    
+    // Remove the link from the document
+    document.body.removeChild(a);
+});
+
+
+// Event listener for the save button
+// document.getElementById('OverwritePageBtn').addEventListener('click',() => {
+//     alert("Dev is dumb and doesn't know how to get save as to pop up to overwrite screen yet (or even if I can). Please right click on the screen and overwrite this file by taking the current file path in the url and putting that into the file explore search path.");
+// });
+
+// Search functionality
+searchBar.addEventListener('input', () => {
+    const query = searchBar.value.toLowerCase();
+
+    if(query === ''){
+        highlightMatches();
+    } else {
+        const results = sites.filter(site => {
+            const matchesSiteNumber = site.siteNumber.toLowerCase().includes(query);
+            const matchesSiteName = site.siteName.toLowerCase().includes(query);
+            const matchesSiteIP = showIP && site.siteIP.toLowerCase().includes(query); //check IP if IP display true
+            //why searchable https true or false? ¯\_(ツ)_/¯
+            return matchesSiteNumber || matchesSiteName || matchesSiteIP ;
+        }).slice(0, 5);
+        firstSeachResult = results[0];
+        displayDropdown(results);
+        highlightMatches(query);
+        
+
+    }
+});
+
+//Seach on enter - open stuff
+searchBar.addEventListener('keyup', function(event) {
+    if (event.key === 'Enter') {
+        if(searchBar.value.trim() === AdminDashboardKeyword){
+            document.getElementById("AdminDashboard").style.display = "inline";
+        } else { // should have a try and catch her because if they don't have a site search it doesn't work but ... eh
+            console.log();
+            window.location.href = `http://${firstSeachResult.siteIP}/`;
+        } 
+    }
+});
+
+//
+
+
+// Display search results in a dropdown
+function displayDropdown(results) {
+    searchResultsDiv.innerHTML = '';
+    results.forEach(result => {
+        const div = document.createElement('div');
+        div.className = 'dropdown-item';
+        div.innerHTML = `<a href="http://${result.siteIP}/">${result.siteNumber} - ${result.siteName}</a>`;
+        div.addEventListener('click', () => {
+            searchBar.value = div.textContent;
+            highlightMatches(searchBar.value.toLowerCase());
+        });
+        searchResultsDiv.appendChild(div);
+    });
+    searchResultsDiv.style.display = results.length > 0 ? 'block' : 'none';
+}
+
+// Highlight matching links
+function highlightMatches(query) {
+    anchorElements.forEach(anchor => {
+        anchor.classList.toggle('highlight', anchor.textContent.toLowerCase().includes(query));
+    });
+}
+
+// Close the dropdown when clicking outside
+document.addEventListener('click', e => {
+    if (!e.target.closest('#searchBar')) {
+        searchResultsDiv.style.display = 'none';
+    }
+});
+
+// Toggle edit mode
+enableEditModeBtn.addEventListener('click', () => {
+    editMode = !editMode;
+    enableEditModeBtn.textContent = editMode ? "Disable Edit Mode" : "Enable Edit Mode";
+});
+
+// Open edit modal
+anchorElements.forEach(anchor => {
+    anchor.addEventListener('click', event => {
+        if (editMode) {
+            event.preventDefault();
+            currentEditElement = anchor;
+            openEditModal(anchor);
+        }
+    });
+});
+
+function openEditModal(anchor) {
+    document.getElementById('editSiteNumber').value = anchor.dataset.site;
+    document.getElementById('editSiteName').value = anchor.dataset.location;
+    document.getElementById('editSiteIP').value = anchor.dataset.ip;
+    document.getElementById('editHasHTTPS').checked = anchor.dataset.https === 'true';
+    editModal.style.display = 'block';
+}
+
+// Save changes in edit form
+editForm.addEventListener('submit', event => {
+    event.preventDefault();
+    const siteNumber = document.getElementById('editSiteNumber').value;
+    const siteName = document.getElementById('editSiteName').value;
+    const siteIP = document.getElementById('editSiteIP').value;
+    const hasHTTPS = document.getElementById('editHasHTTPS').checked;
+
+    updateAnchorElement(currentEditElement, { siteNumber, siteName, siteIP, hasHTTPS });
+    editModal.style.display = 'none';
+});
+
+// Remove link
+document.getElementById('removeLink').addEventListener('click', () => {
+    if (currentEditElement) {
+        currentEditElement.remove();
+        editModal.style.display = 'none';
+    }
+});
+
+// Open add modal
+document.getElementById('openAddModal').addEventListener('click', () => {
+    addModal.style.display = 'block';
+});
+
+// Add new link
+addForm.addEventListener('submit', event => {
+    event.preventDefault();
+    const siteNumber = document.getElementById('addSiteNumber').value;
+    const siteName = document.getElementById('addSiteName').value;
+    const siteIP = document.getElementById('addSiteIP').value;
+    const hasHTTPS = document.getElementById('addHasHTTPS').checked;
+
+    const newAnchor = document.createElement('a');
+    newAnchor.className = 'location-link';
+    updateAnchorElement(newAnchor, { siteNumber, siteName, siteIP, hasHTTPS });
+    allCatagoryDiv.appendChild(newAnchor);
+    addModal.style.display = 'none';
+    addForm.reset();
+});
+
+// Update anchor element attributes and content
+function updateAnchorElement(anchor, { siteNumber, siteName, siteIP, hasHTTPS }) {
+    anchor.dataset.site = siteNumber;
+    anchor.dataset.location = siteName;
+    anchor.dataset.ip = siteIP;
+    anchor.dataset.https = hasHTTPS;
+    anchor.href = `${hasHTTPS ? 'https://' : 'http://'}${siteIP}`;
+    anchor.textContent = `${siteNumber} - ${siteName}${showIP ? ` (${siteIP})` : ''}${showHTTPS ? ` [${hasHTTPS ? 'True' : 'False'}]` : ''}`;
+}
+
+// Close modals on clicking 'x' or outside the modal
+document.querySelectorAll('.modal .close').forEach(closeBtn => {
+    closeBtn.addEventListener('click', () => {
+        closeBtn.closest('.modal').style.display = 'none';
+    });
+});
+
+window.addEventListener('click', event => {
+    if (event.target.classList.contains('modal')) {
+        event.target.style.display = 'none';
+    }
+});
+</script>
+</body>
+</html>
