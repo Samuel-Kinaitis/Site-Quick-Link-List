@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NVR's</title>
+    <title>SQLL</title>
 
     <style>
         :root {
@@ -310,7 +310,7 @@ input{
 <nav>
     <!-- search bar menu-->
     <div class="menu">
-        <div class="menu-title"><h1>NVR's</h1></div>
+        <div class="menu-title"><h1>Site-Quick-Link-List</h1></div>
         <div class="search-bar">
             <input type="text" id="searchBar" placeholder="Search by Site Number or Location Name" autocomplete="off">
             <div id="searchResults" class="dropdown"></div>
@@ -333,8 +333,7 @@ input{
         <button class="ControlBtn" id="toggleHTTPSModeBtn">Show HTTPS</button>
         <button class="ControlBtn" id="SavePageBtn">Download File</button>
         <!-- <button class="ControlBtn" id="OverwritePageBtn">Overwrite File</button> -->
-         <p>If you are seeing this text (and not IT), something has gone wrong, please try refreshing the page. If that hasn't worked this page is currently broke, please use a different page to get nvr links. Also anything colored pink like this is bad.</p>
-
+        <p>I am pink testing text</p>
         <div class="header">
             <h2>Admin Dashboard</h2>
         </div>
@@ -379,7 +378,11 @@ input{
               <!-- Also http secure might have been a waste of resources it does nothing useful right now and if set to true does break things -->
     <!-- example <a class="location-link" href="URL" data-site="siteNumber" data-location="siteName" data-ip="siteIP" data-https="false"></a> -->
     
-    
+    <a class="location-link" href="1.1.1.1" data-site="1111" data-location="ClouldFlare DNS" data-ip="1.1.1.1" data-https="true"></a>
+    <a class="location-link" href="google.com" data-site="8888" data-location="Google DNS" data-ip="8.8.8.8" data-https="true"></a>
+    <a class="location-link" href="10.0.0.1" data-site="0000" data-location="Your Router" data-ip="10.0.0.1" data-https="false"></a>
+    <a class="location-link" href="https://lookup.icann.org/en" data-site="3170" data-location="ICANN" data-ip="lookup.icann.org/en" data-https="true"></a>
+    <a class="location-link" href="https://example.net/" data-site="0138" data-location="example" data-ip="https://example.net/" data-https="true"></a>
     <!-- Sites added after this have been added using the web'like'page -->
 
     <!-- Edit/Remove Modal -->
@@ -517,7 +520,7 @@ SavePageBtn.addEventListener('click', () => {
     // Create a link element
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = 'NVR_Page.html';
+    a.download = 'Site-Quick-Link-List.html';
     
     // Append the link to the body
     document.body.appendChild(a);
